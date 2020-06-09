@@ -45,6 +45,9 @@ app.get(`/api/insta`, async function (req, res) {
     output: "./image.png",
     quality: 100,
     content: { path, city, color },
+    puppeteerArgs: {
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    },
     html,
     //     html: `<html>
     //   <head>
