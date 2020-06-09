@@ -75,6 +75,6 @@ app.get(`/api/insta`, async function (req, res) {
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
-app.listen(port, () =>
+app.listen(PORT, () =>
   console.log(`Example app listening at http://localhost:${PORT}`)
 );
