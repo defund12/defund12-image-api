@@ -4,7 +4,7 @@ const nodeHtmlToImage = require("node-html-to-image");
 const fs = require("fs");
 const path = require("path");
 
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 
 const html = fs.readFileSync(path.resolve(__dirname, "image.html"), "utf8");
 
@@ -76,5 +76,5 @@ app.get(`/api/insta`, async function (req, res) {
 app.get("/", (req, res) => res.send("Hello World!"));
 
 app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Example app listening at http://localhost:${PORT}`)
 );
