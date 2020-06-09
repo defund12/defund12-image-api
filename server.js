@@ -39,12 +39,12 @@ app.get(`/api/insta`, async function (req, res) {
     color = colors[req.query.color];
   }
 
-  const { path, city } = req.query;
+  const { path, city, titleSize = 120 } = req.query;
 
   const image = await nodeHtmlToImage({
     output: "./image.png",
     quality: 100,
-    content: { path, city, color },
+    content: { path, city, color, titleSize },
     puppeteerArgs: {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     },
