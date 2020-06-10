@@ -4,7 +4,7 @@ An api for generating images
 
 ## Docs
 
-### /insta
+### /api/insta
 
 Generate an instagram image
 
