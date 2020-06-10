@@ -46,35 +46,13 @@ app.get(`/api/insta`, async function (req, res) {
   const formattedCity = city.replace(/(?:\r\n|\r|\n)/g, "<br>");
 
   const image = await nodeHtmlToImage({
-    output: "./image.png",
+    // output: "./image.png",
     quality: 100,
     content: { path, city: formattedCity, color, titleSize, urlSize },
     puppeteerArgs: {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     },
     html,
-    //     html: `<html>
-    //   <head>
-    //     <link
-    //       href="https://fonts.googleapis.com/css?family=Poppins:400,700,900"
-    //       rel="stylesheet"
-    //     />
-    //     <style>
-    //       body {
-    //         font-family: "Poppins";
-    //         font-weight: 700;
-    //       }
-
-    //       img {
-    //         max-width: 100%;
-    //       }
-    //     </style>
-    //   </head>
-    //   <body>
-    //     Hello world 🙌!
-
-    //   </body>
-    // </html>`,
   });
   res.writeHead(200, { "Content-Type": "image/png" });
   res.end(image, "binary");
