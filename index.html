@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Defund12 image</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+      const App = () => {
+        const [city, setCity] = React.useState("City");
+        const [path, setPath] = React.useState("path");
+        const [color, setColor] = React.useState("blue");
+        const [titleSize, setTitleSize] = React.useState("120");
+        const [url, setUrl] = React.useState(null);
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          const params = `path=${encodeURIComponent(
+            path
+          )}&city=${encodeURIComponent(city)}&color=${encodeURIComponent(
+            color
+          )}&titleSize=${encodeURIComponent(titleSize)}`;
+
+          const url = `https://defund12-image-api.herokuapp.com/api/insta?${params}`;
+
+          setUrl(url);
+        };
+
+        return (
+          <div>
+            <form onSubmit={handleSubmit} className="p-4 mb-10">
+              <textarea
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
+                class="border block mb-3 rounded p-2"
+                placeholder="edit me"
+              ></textarea>
+
+              <input
+                onChange={(e) => setPath(e.target.value)}
+                value={path}
+                class="border block mb-3 rounded p-2"
+                placeholder="path"
+              />
+
+              <input
+                onChange={(e) => setColor(e.target.value)}
+                value={color}
+                class="border block mb-3 rounded p-2"
+                placeholder="color"
+              />
+
+              <input
+                onChange={(e) => setTitleSize(e.target.value)}
+                value={titleSize}
+                class="border block mb-3 rounded p-2"
+                placeholder="120"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 p-2 px-3 rounded text-white"
+              >
+                Generate
+              </button>
+            </form>
+
+            <div className="p-4">{url && <img src={url} />}</div>
+          </div>
+        );
+      };
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
