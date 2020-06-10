@@ -42,10 +42,13 @@ app.get(`/api/insta`, async function (req, res) {
 
   const { path, city, titleSize = 120, urlSize = 55 } = req.query;
 
+  // Support linew breaks
+  const formattedCity = city.replace(/\\n/g, "<br />");
+
   const image = await nodeHtmlToImage({
     output: "./image.png",
     quality: 100,
-    content: { path, city, color, titleSize, urlSize },
+    content: { path, city: formattedCity, color, titleSize, urlSize },
     puppeteerArgs: {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     },
