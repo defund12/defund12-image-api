@@ -17,6 +17,7 @@ const colors = {
   orange: "#FB8F4E",
   purple: "#8A54F4",
   pink: "#FF62C8",
+  red: "#FF5756",
 };
 
 const randomColor = () => {

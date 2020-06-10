@@ -28,3 +28,4 @@ Generate an instagram image
 - `orange`
 - `purple`
 - `pink`
+- `red`
