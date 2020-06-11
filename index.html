@@ -35,7 +35,7 @@
         const handleSubmit = (e) => {
           e.preventDefault();
           const params = `path=${encodeURIComponent(
-            path
+            path.toLowerCase()
           )}&city=${encodeURIComponent(city)}&color=${encodeURIComponent(
             color
           )}&titleSize=${encodeURIComponent(titleSize)}`;
