@@ -6,7 +6,8 @@ const path = require("path");
 
 const PORT = process.env.PORT || 5000;
 
-const html = fs.readFileSync(path.resolve(__dirname, "image.html"), "utf8");
+const instaTemplate = fs.readFileSync(path.resolve(__dirname, "image.html"), "utf8");
+const previewTemplate = fs.readFileSync(path.resolve(__dirname, "previewImage.html"), "utf8");
 
 const colors = {
   yellow: "#F9DE62",
@@ -52,7 +53,35 @@ app.get(`/api/insta`, async function (req, res) {
     puppeteerArgs: {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     },
-    html,
+    html: instaTemplate,
+  });
+  res.writeHead(200, { "Content-Type": "image/png" });
+  res.end(image, "binary");
+});
+
+app.get(`/api/preview`, async function (req, res) {
+
+  if (!req.query.city) {
+    res.status(400).send("You need to specify city");
+  }
+
+  if (!req.query.state) {
+    res.status(400).send("You need to specify state");
+  }
+
+  const { city, state} = req.query;
+
+  // Support linew breaks
+  const formattedCity = city.replace(/(?:\r\n|\r|\n)/g, "<br>");
+
+  const image = await nodeHtmlToImage({
+    // output: "./image.png",
+    quality: 100,
+    content: {city: formattedCity, state},
+    puppeteerArgs: {
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    },
+    html : previewTemplate,
   });
   res.writeHead(200, { "Content-Type": "image/png" });
   res.end(image, "binary");
