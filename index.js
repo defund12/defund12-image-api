@@ -1,13 +1,19 @@
 const express = require("express");
 const app = express();
-const nodeHtmlToImage = require("node-html-to-image");
 const fs = require("fs");
+const { getImage } = require('./screenshot');
 const path = require("path");
 
-const PORT = process.env.PORT || 5000;
+const port = 5000;
 
 const instaTemplate = fs.readFileSync(path.resolve(__dirname, "image.html"), "utf8");
 const previewTemplate = fs.readFileSync(path.resolve(__dirname, "previewImage.html"), "utf8");
+
+// Listen on port 5000
+app.listen(port, () => {
+  console.log(`Server is booming on port 5000
+Visit http://localhost:5000`);
+});
 
 const colors = {
   yellow: "#F9DE62",
@@ -43,24 +49,18 @@ app.get(`/api/insta`, async function (req, res) {
 
   const { path, city, titleSize = 120, urlSize = 55 } = req.query;
 
-  // Support linew breaks
+  // Support line breaks
   const formattedCity = city.replace(/(?:\r\n|\r|\n)/g, "<br>");
 
-  const image = await nodeHtmlToImage({
-    // output: "./image.png",
-    quality: 100,
+  const image = await getImage({
     content: { path, city: formattedCity, color, titleSize, urlSize },
-    puppeteerArgs: {
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    },
     html: instaTemplate,
   });
   res.writeHead(200, { "Content-Type": "image/png" });
   res.end(image, "binary");
 });
 
-app.get(`/api/preview`, async function (req, res) {
-
+app.get("/api/preview", async (req, res) => {
   if (!req.query.city) {
     res.status(400).send("You need to specify city");
   }
@@ -69,20 +69,19 @@ app.get(`/api/preview`, async function (req, res) {
     res.status(400).send("You need to specify state");
   }
 
-  const { city, state} = req.query;
+  const { city, state } = req.query;
 
   // Support linew breaks
   const formattedCity = city.replace(/(?:\r\n|\r|\n)/g, "<br>");
 
-  const image = await nodeHtmlToImage({
+  const image = await getImage({
     // output: "./image.png",
-    quality: 100,
+
     content: {city: formattedCity, state},
-    puppeteerArgs: {
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    },
     html : previewTemplate,
   });
+
+
   res.writeHead(200, { "Content-Type": "image/png" });
   res.end(image, "binary");
 });
@@ -90,7 +89,3 @@ app.get(`/api/preview`, async function (req, res) {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));
 });
-
-app.listen(PORT, () =>
-  console.log(`Example app listening at http://localhost:${PORT}`)
-);
