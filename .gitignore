@@ -2,3 +2,4 @@ node_modules/
 image.png
 .vercelignore
 .vercel
+package-lock.json
