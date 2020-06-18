@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Defund12 image</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+      const App = () => {
+        const [city, setCity] = React.useState("City");
+        const [path, setPath] = React.useState("path");
+        const [color, setColor] = React.useState("blue");
+        const [titleSize, setTitleSize] = React.useState("120");
+        const [url, setUrl] = React.useState(null);
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          const params = `path=${encodeURIComponent(
+            path.toLowerCase()
+          )}&city=${encodeURIComponent(city)}&color=${encodeURIComponent(
+            color
+          )}&titleSize=${encodeURIComponent(titleSize)}`;
+
+          const url = `https://defund12.vercel.app/api/insta?${params}`;
+
+          setUrl(url);
+        };
+
+        const colors = [
+          "yellow",
+          "magenta",
+          "green",
+          "blue",
+          "turquoise",
+          "orange",
+          "purple",
+          "pink",
+          "red",
+        ];
+
+        return (
+          <div className="p-4">
+            <form onSubmit={handleSubmit} className="mb-10">
+              <textarea
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
+                class="border block mb-3 rounded p-2"
+                placeholder="edit me"
+              ></textarea>
+
+              <input
+                onChange={(e) => setPath(e.target.value)}
+                value={path}
+                class="border block mb-3 rounded p-2"
+                placeholder="path"
+              />
+
+              <input
+                onChange={(e) => setTitleSize(e.target.value)}
+                value={titleSize}
+                class="border block mb-3 rounded p-2"
+                placeholder="120"
+              />
+
+              <div className="mb-3">
+                {colors.map((colorItem) => (
+                  <div>
+                    <input
+                      type="radio"
+                      id={colorItem}
+                      name={colorItem}
+                      value={colorItem}
+                      className="mr-2"
+                      checked={color === colorItem}
+                      onClick={() => setColor(colorItem)}
+                    />
+                    <label for={colorItem}>{colorItem}</label>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 p-2 px-3 rounded text-white"
+              >
+                Generate
+              </button>
+            </form>
+            {url && (
+              <div className="">
+                <a className="text-blue-500" href={url}>
+                  {url}
+                </a>
+                <img src={url} className="mt-3 max-w-xl" />
+              </div>
+            )}
+          </div>
+        );
+      };
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
