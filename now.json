@@ -1,0 +1,21 @@
+  
+{
+  "builds": [{ "src": "index.js", "use": "@now/node-server" }],
+  "routes": [
+    {
+      "src": "/api/preview*",
+      "dest": "/index.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/api/insta*",
+      "dest": "/index.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/",
+      "dest": "/index.js",
+      "methods": ["GET"]
+    }
+  ]
+}
