@@ -29,3 +29,16 @@ Generate an instagram image
 - `purple`
 - `pink`
 - `red`
+
+
+### /api/preview
+
+Generate a meta preview image
+
+#### Options
+
+| Param     | Required | Description                                                                                   |
+| --------- | -------- | --------------------------------------------------------------------------------------------- |
+| state     | yes      | Used to fill in state in the image template                                                   |
+| city      | yes      | Used to fill in city in the image template                                                    |
+      
