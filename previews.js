@@ -14,66 +14,39 @@ Visit http://localhost:5000`);
 
 const previewTemplate = fs.readFileSync(path.resolve(__dirname, "previewImage.html"), "utf8");
 
-//deprecated - remove after succesful usage of other api route
-app.get("/api/preview", async (req, res) => {
-  if (!req.query.city) {
-    res.status(400).send("You need to specify city");
+app.get("/api/preview/*", async (req, res) => {
+
+  let text, location;
+  if(req.query.state && req.query.city){
+    const {city, state} = req.query
+    location = `in ${city}, ${state}`
+    switch(req.params[0]) {
+      case "letter": 
+        text = `Order physical letters to be printed and mailed to ${city} government officials.`
+        break;
+      case "email":
+        text = `Send pre-scripted emails to ${city} government officials.`
+        break;
+      default:
+        text = "Send pre-scripted emails and physical letters to government officials and council members."
+    }
+  } else{
+    switch(req.params[0]) {
+      case "letter": 
+        text = `Order physical letters to be printed and mailed to government officials and council members.`
+        break;
+      case "email":
+        text = `Send pre-scripted emails to government officials and council members.`
+        break;
+      default:
+        text = "Send pre-scripted emails and physical letters to government officials and council members."
+    }
   }
-
-  if (!req.query.state) {
-    res.status(400).send("You need to specify state");
-  }
-
-  const { city, state } = req.query;
-
-  const text = `Send pre-scripted emails to ${city} government officials.`
-
-  // Support linew breaks
-  const formattedCity = city.replace(/(?:\r\n|\r|\n)/g, "<br>");
 
   const image = await getImage({
     // output: "./image.png",
 
-    content: {city: formattedCity, state, text},
-    html : previewTemplate,
-  });
-
-
-  res.writeHead(200, { "Content-Type": "image/png" });
-  res.end(image, "binary");
-});
-
-app.get("/api/preview/:type", async (req, res) => {
-  if (!req.query.city) {
-    res.status(400).send("You need to specify city");
-  }
-
-  if (!req.query.state) {
-    res.status(400).send("You need to specify state");
-  }
-
-  const { city, state } = req.query;
-
-  
-  let text;
-  switch(req.params.type) {
-    case "letter": 
-      text = `Order physical letters to be printed and mailed to ${city} government officials.`
-      break;
-    case "email":
-      text = `Send pre-scripted emails to ${city} government officials.`
-      break;
-    default:
-      text = "Send pre-scripted emails to government officials"
-  }
-
-  // Support linew breaks
-  const formattedCity = city.replace(/(?:\r\n|\r|\n)/g, "<br>");
-
-  const image = await getImage({
-    // output: "./image.png",
-
-    content: {city: formattedCity, state, text},
+    content: {location, text},
     html : previewTemplate,
   });
 
