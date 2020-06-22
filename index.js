@@ -6,9 +6,6 @@ const path = require("path");
 
 const port = 5000;
 
-const instaTemplate = fs.readFileSync(path.resolve(__dirname, "image.html"), "utf8");
-const previewTemplate = fs.readFileSync(path.resolve(__dirname, "previewImage.html"), "utf8");
-
 // Listen on port 5000
 app.listen(port, () => {
   console.log(`Server is booming on port 5000
@@ -33,6 +30,7 @@ const randomColor = () => {
 };
 
 app.get(`/api/insta`, async function (req, res) {
+  const instaTemplate = fs.readFileSync(path.resolve(__dirname, "instaImage.html"), "utf8");
   let color = randomColor();
 
   if (!req.query.path) {
@@ -60,7 +58,19 @@ app.get(`/api/insta`, async function (req, res) {
   res.end(image, "binary");
 });
 
-app.get("/api/preview", async (req, res) => {
+app.get("/api/preview/:type", async (req, res) => {
+  let previewTemplate;
+  switch(req.params.type) {
+    case "letter":
+      previewTemplate = fs.readFileSync(path.resolve(__dirname, "letterImage.html"), "utf8");
+      break;
+    case "email":
+      previewTemplate = fs.readFileSync(path.resolve(__dirname, "emailImage.html"), "utf8");
+      break;
+    default:
+      res.status(400).send("Invalid path.")
+  }
+  
   if (!req.query.city) {
     res.status(400).send("You need to specify city");
   }
