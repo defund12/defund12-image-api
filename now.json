@@ -1,21 +1,22 @@
   
 {
-  "builds": [{ "src": "index.js", "use": "@now/node-server" }],
+  "builds": [{ "src": "insta.js", "use": "@now/node-server" }, 
+    { "src": "previews.js", "use": "@now/node-server" }, 
+    { "src": "index.html", "use": "@now/static" }],
   "routes": [
     {
-      "src": "/api/preview*",
-      "dest": "/index.js",
+      "src": "/api/preview(.*)",
+      "dest": "/previews.js",
       "methods": ["GET"]
     },
     {
       "src": "/api/insta*",
-      "dest": "/index.js",
+      "dest": "/insta.js",
       "methods": ["GET"]
     },
     {
       "src": "/",
-      "dest": "/index.js",
-      "methods": ["GET"]
+      "dest": "/index.html"
     }
   ]
 }
